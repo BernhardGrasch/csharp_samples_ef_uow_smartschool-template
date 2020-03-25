@@ -7,7 +7,8 @@ namespace SmartSchool.Core.Contracts
     {
         void AddRange(Measurement[] measurements);
 
-        IEnumerable<Measurement> GetAllMeasurementsByLocationAndName(string location, string name);
+        Measurement[] GetAllMeasurementsByLocationAndName(string location, string name);
 
+        IEnumerable<Measurement> GetValidCo2MeasurementsInOffice(string location, int min, int max);
     }
 }
