@@ -16,12 +16,29 @@ namespace SmartSchool.Persistence
         }
 
         public void AddRange(List<Sensor> sensors) => _dbContext.AddRange(sensors);
-        
 
-        public IEnumerable<Sensor> GetAllSensors()
+
+        //public IEnumerable<Sensor> GetAllSensors()
+        //{
+        //    return _dbContext.Sensors
+        //        .Include(s => s.Measurements);
+        //}
+
+        public (string Name, string Location, double Average)[] GetAllSensorsWithAvgMeasurements()
         {
             return _dbContext.Sensors
-                .Include(s => s.Measurements);
+                .Include(s => s.Measurements)
+                .Select(s => new
+                {
+                    Name = s.Name,
+                    Location = s.Location,
+                    Average = s.Measurements.Average(m => m.Value)
+                })
+                .OrderBy(s => s.Location)
+                .ThenBy(s => s.Name)
+                .AsEnumerable()
+                .Select(s => (s.Name, s.Location, s.Average))
+                .ToArray();
         }
 
         public Sensor GetSensorByLocationAndName(string location, string name)

@@ -49,10 +49,11 @@ namespace SmartSchool.TestConsole
                     {
                         Sensor sensor = sensors
                             .Values
-                            .SingleOrDefault(s => s.Name == name && s.Location == location);
+                            .SingleOrDefault(s => s.Name.Equals(name) && s.Location.Equals(location));
                         measurement.Sensor = sensor;
                         sensor.Measurements.Add(measurement);
                     }
+                    measurements.Add(measurement);
                 }
                 if(skipRow == true)
                 {

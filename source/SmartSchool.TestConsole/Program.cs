@@ -41,12 +41,10 @@ namespace SmartSchool.TestConsole
 				Console.WriteLine();
 
 				var count = unitOfWork.MeasurementRepository
-                    .GetAllMeasurementsByLocationAndName("livingromm", "temperature").Count();   // TODO
+                    .GetAllMeasurementsByLocationAndName("livingroom", "temperature").Count();   // TODO
 
 				Console.WriteLine($"Anzahl Messwerte für Sensor temperature in location livingroom: {count}");
 				Console.WriteLine();
-
-
 
                 var greatestmeasurements = unitOfWork.MeasurementRepository
                     .GetAllMeasurementsByLocationAndName("livingroom", "temperature");  // TODO
@@ -55,8 +53,6 @@ namespace SmartSchool.TestConsole
 				WriteMeasurements(greatestmeasurements);
 				Console.WriteLine();
 
-
-
                 var average = unitOfWork.MeasurementRepository
                     .GetValidCo2MeasurementsInOffice("office", 300, 5000)
                     .Average(m => m.Value);
@@ -64,17 +60,15 @@ namespace SmartSchool.TestConsole
 				Console.WriteLine();
 				Console.WriteLine("Alle Sensoren mit dem Durchschnitt der Messwerte");
                 var allAverage = unitOfWork.SensorRepository
-                    .GetAllSensors();
+                    .GetAllSensorsWithAvgMeasurements();
 
-                foreach(var item in allAverage)
+                foreach (var item in allAverage)
                 {
-                    Console.WriteLine($"{item.Location} {item.Name} {item.Measurements}");
+                    Console.WriteLine($"{item.Location, -25} {item.Name, -25} {item.Average, -25 :f02}");
                 }
-                    
+            }
 
-			}
-
-			Console.Write("Beenden mit Eingabetaste ...");
+            Console.Write("Beenden mit Eingabetaste ...");
 			Console.ReadLine();
 		}
 

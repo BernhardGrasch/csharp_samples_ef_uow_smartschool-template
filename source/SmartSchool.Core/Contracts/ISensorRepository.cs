@@ -8,6 +8,8 @@ namespace SmartSchool.Core.Contracts
     {
         void AddRange(List<Sensor> sensors);
         Sensor GetSensorByLocationAndName(string location, string name);
-        IEnumerable<Sensor> GetAllSensors();
+        //IEnumerable<Sensor> GetAllSensors();
+
+        (string Name, string Location, double Average)[] GetAllSensorsWithAvgMeasurements();
     }
 }
