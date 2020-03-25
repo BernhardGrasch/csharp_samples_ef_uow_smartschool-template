@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using SmartSchool.Core.Entities;
+using Utils;
+using System.Linq;
+using System.IO;
+using System.Text;
 
 namespace SmartSchool.TestConsole
 {
@@ -13,7 +17,41 @@ namespace SmartSchool.TestConsole
         /// </summary>
         public static IEnumerable<Measurement> ReadFromCsv()
         {
-            throw new NotImplementedException();
+            IList<Measurement> measurements = new List<Measurement>();
+            IDictionary<string, Sensor> sensors = new Dictionary<string, Sensor>();
+            string[] lines = File.ReadAllLines(Filename, Encoding.UTF8);
+
+            foreach (var item in lines)
+            {
+                string[] splitParts = item.Split(";");
+                string location = splitParts[2].Split("_")[0];
+                string name = splitParts[2].Split("_")[1];
+                DateTime dateTime = DateTime.Parse($"{splitParts[0]} {splitParts[1]}");
+
+                Measurement measurement = new Measurement() { Time = dateTime, Value = Convert.ToDouble(splitParts[3]) };
+
+                if (sensors.TryGetValue(splitParts[2], out var item2) != true)
+                {
+                    Sensor newSensor = new Sensor()
+                    {
+                        Name = name,
+                        Location = location
+                    };
+                    measurement.Sensor = newSensor;
+                    newSensor.Measurements.Add(measurement);
+                    sensors.Add(splitParts[2], newSensor);
+                }
+                else
+                {
+                    Sensor sensor = sensors
+                        .Values
+                        .SingleOrDefault(s => s.Name == name && s.Location == location);
+                    measurement.Sensor = sensor;
+                    sensor.Measurements.Add(measurement);
+                }
+            }
+
+            return measurements;
         }
 
     }

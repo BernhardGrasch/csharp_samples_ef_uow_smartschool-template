@@ -18,5 +18,6 @@ namespace SmartSchool.Persistence
             _dbContext.Measurements.AddRange(measurements);
         }
 
+
    }
 }
